@@ -4,4 +4,9 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum:255 }, uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum:6 }, allow_nil: true
+
+  # ランダムなトークンを返す
+  def User.new_token
+    SecureRandom.urlsafe_base64
+  end
 end
