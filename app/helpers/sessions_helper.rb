@@ -34,4 +34,11 @@ module SessionsHelper
     def store_location
       session[:forwarding_url] = request.original_url if request.get?
     end
+
+    # ユーザーのセッションを永続的にする
+    def remember(user)
+      user.remember
+      cookies.permanent.signed[:user_id] = user.id
+      cookies.permanent[:remember_token] = user.remember_token
+    end
 end
