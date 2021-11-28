@@ -5,18 +5,24 @@ module SessionsHelper
     session[:user_id] = user.id
   end
 
-  # 現在ログイン中のユーザーを返す（いる場合）
-  def current_user
-    if @current_user.nil?
-      @current_user = User.find_by(id: session[:user_id])
-    else
-      @current_user
-    end
-  end
+
   # ログイン判定
   def logged_in?
     !current_user.nil?
   end
+
+    # 記憶トークンcookieに対応するユーザーを返す
+    def current_user
+      if (user_id = session[:user_id])
+        @current_user ||= User.find_by(id: user_id)
+      elsif (user_id = cookies.signed[:user_id])
+        user = User.find_by(id: user_id)
+        if user && user.authenticated?(cookies[:remember_token])
+          log_in user
+          @current_user = user
+        end
+      end
+    end
 
   # ユーザーをログアウトする
   def log_out
