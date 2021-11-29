@@ -25,6 +25,12 @@ class User < ApplicationRecord
     self.remember_token = User.new_token
     update_attribute(:remember_digest, User.digest(remember_token))
   end
+
+  # 試作feedの定義
+  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  def feed
+    Micropost.where("user_id = ?", id)
+  end
   
   # 渡されたトークンがダイジェストと一致したらtrueを返す
   def authenticated?(remember_token)
