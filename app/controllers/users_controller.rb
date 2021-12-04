@@ -13,8 +13,7 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
-  
-
+  # ユーザーの詳細ページにてpostsを表示させるので
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
